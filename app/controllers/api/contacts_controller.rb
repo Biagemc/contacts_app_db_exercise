@@ -1,22 +1,40 @@
 class Api::ContactsController < ApplicationController
-  def wife
-    @wife_contact = Contact.second
-    render "wife.json.jb"
+  def index
+    @contacts = Contact.all
+    render "index.json.jb"
   end
 
-  def all_contacts
-    contacts = Contact.all
-    @hash_contacts = []
+  def create
+    @contact = Contact.create(
+      first_name: params[:first_name],
+      last_name: params[:last_name],
+      email: "#{params[:fist_name]}.#{params[:last_name]}@gmail.com",
+      phone_number: params[:phone_number],
+    )
+    # @contact.save
+    render "show.json.jb"
+  end
 
-    contacts.each do |contact|
-      @hash_contacts << {
-        first_name: contact.first_name,
-        last_name: contact.last_name,
-        email: contact.email,
-        phone_number: contact.phone_number,
-      }
-    end
+  def show
+    @contact = Contact.find_by(id: params[:id])
+    render "show.json.jb"
+  end
 
-    render "contacts.json.jb"
+  def update
+    @contact = Contact.find_by(id: params[:id])
+    @contact.update(
+      first_name: params[:first_name] || @contact.first_name,
+      last_name: params[:last_name] || @contact.last_name,
+      email: "#{params[:fist_name]}.#{params[:last_name]}@gmail.com" || @contact.email,
+      phone_number: params[:phone_number] || @contact.phone_number,
+    )
+    @contact.save
+    render "show.json.jb"
+  end
+
+  def destroy
+    @contact = Contact.find_by(id: params[:id])
+    @contact.destroy
+    render json: { message: "Contact id# #{params[:id]} was successfully destroyed" }
   end
 end

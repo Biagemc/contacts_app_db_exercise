@@ -1,6 +1,0 @@
-{
-  first_name: @wife_contact.first_name,
-  last_name: @wife_contact.last_name,
-  email: @wife_contact.email,
-  phone_number: @wife_contact.phone_number,
-}
