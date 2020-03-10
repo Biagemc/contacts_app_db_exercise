@@ -8,7 +8,7 @@ class Api::ContactsController < ApplicationController
     @contact = Contact.create(
       first_name: params[:first_name],
       last_name: params[:last_name],
-      email: "#{params[:first_name]}.#{params[:last_name]}@gmail.com",
+      email: params[:email],
       phone_number: params[:phone_number],
     )
     # @contact.save
@@ -25,7 +25,7 @@ class Api::ContactsController < ApplicationController
     @contact.update(
       first_name: params[:first_name] || @contact.first_name,
       last_name: params[:last_name] || @contact.last_name,
-      email: "#{params[:first_name]}.#{params[:last_name]}@gmail.com" || @contact.email,
+      email: params[:email] || @contact.email,
       phone_number: params[:phone_number] || @contact.phone_number,
     )
     @contact.save
