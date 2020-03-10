@@ -1,9 +1,9 @@
 @contacts.map do |contact|
   {
     id: contact.id,
-    full_name: contact.full_name,
+    name: contact.full_name,
     email: contact.email,
-    phone_number: contact.phone_number,
+    phone_number: contact.japan_country_code,
     updated_at: contact.friendly_updated_at,
   }
 end
