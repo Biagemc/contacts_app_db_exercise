@@ -10,4 +10,10 @@ class Contact < ApplicationRecord
   def japan_country_code
     "+81 #{phone_number}"
   end
+
+  def address
+    [street, city, state, country].compact.join(", ")
+  end
+
+  geocoded_by :address
 end

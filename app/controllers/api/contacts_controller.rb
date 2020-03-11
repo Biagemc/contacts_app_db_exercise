@@ -31,6 +31,7 @@ class Api::ContactsController < ApplicationController
       email: params[:email] || @contact.email,
       phone_number: params[:phone_number] || @contact.phone_number,
       bio: params[:bio] || @contact.bio,
+
     )
     @contact.save
     render "show.json.jb"
