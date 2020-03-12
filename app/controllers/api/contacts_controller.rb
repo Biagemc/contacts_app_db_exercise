@@ -9,7 +9,7 @@ class Api::ContactsController < ApplicationController
     longitude = results.first.coordinates[1]
     latitude = results.first.coordinates[0]
 
-    @contact = Contact.create(
+    @contact = Contact.save(
       first_name: params[:first_name],
       middle_name: params[:middle_name],
       last_name: params[:last_name],
@@ -20,8 +20,11 @@ class Api::ContactsController < ApplicationController
       latitude: latitude,
       longitude: longitude,
     )
-    # @contact.save
-    render "show.json.jb"
+    if @contact.save
+      render "show.json.jb"
+    else
+      render json: { errors: @contact.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   def show
@@ -35,19 +38,22 @@ class Api::ContactsController < ApplicationController
     latitude = results.first.coordinates[0]
 
     @contact = Contact.find_by(id: params[:id])
-    @contact.update(
-      first_name: params[:first_name] || @contact.first_name,
-      middle_name: params[:middle_name] || @contact.middle_name,
-      last_name: params[:last_name] || @contact.last_name,
-      email: params[:email] || @contact.email,
-      phone_number: params[:phone_number] || @contact.phone_number,
-      bio: params[:bio] || @contact.bio,
-      address: params[:address] || @contact.address,
-      longitude: longitude,
-      latitude: latitude,
-    )
-    @contact.save
-    render "show.json.jb"
+
+    @contact.first_name = params[:first_name] || @contact.first_name
+    @contact.middle_name = params[:middle_name] || @contact.middle_name
+    @contact.last_name = params[:last_name] || @contact.last_name
+    @contact.email = params[:email] || @contact.email
+    @contact.phone_number = params[:phone_number] || @contact.phone_number
+    @contact.bio = params[:bio] || @contact.bio
+    @contact.address = params[:address] || @contact.address
+    @contact.longitude = longitude
+    @contact.latitude = latitude
+
+    if @contact.save
+      render "show.json.jb"
+    else
+      render json: { errors: @contact.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   def destroy
