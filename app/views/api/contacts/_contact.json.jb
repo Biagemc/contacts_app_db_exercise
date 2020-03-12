@@ -5,4 +5,7 @@
   phone_number: contact.japan_country_code,
   bio: contact.bio,
   updated_at: contact.friendly_updated_at,
+  address: contact.address,
+  longitude: contact.longitude,
+  latitude: contact.latitude,
 }

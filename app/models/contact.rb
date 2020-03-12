@@ -11,9 +11,7 @@ class Contact < ApplicationRecord
     "+81 #{phone_number}"
   end
 
-  def address
-    [street, city, state, country].compact.join(", ")
-  end
-
-  geocoded_by :address
+  # def address
+  #   [street, city, state, country].compact.join(", ")
+  # end
 end

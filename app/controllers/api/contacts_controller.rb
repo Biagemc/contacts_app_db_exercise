@@ -5,6 +5,10 @@ class Api::ContactsController < ApplicationController
   end
 
   def create
+    results = Geocoder.search(:address)
+    longitude = results.first.coordinates[1]
+    latitude = results.first.coordinates[0]
+
     @contact = Contact.create(
       first_name: params[:first_name],
       middle_name: params[:middle_name],
@@ -12,6 +16,9 @@ class Api::ContactsController < ApplicationController
       email: params[:email],
       phone_number: params[:phone_number],
       bio: params[:bio],
+      address: params[:address],
+      latitude: latitude,
+      longitude: longitude,
     )
     # @contact.save
     render "show.json.jb"
@@ -23,6 +30,10 @@ class Api::ContactsController < ApplicationController
   end
 
   def update
+    results = Geocoder.search(:address)
+    longitude = results.first.coordinates[1]
+    latitude = results.first.coordinates[0]
+
     @contact = Contact.find_by(id: params[:id])
     @contact.update(
       first_name: params[:first_name] || @contact.first_name,
@@ -31,7 +42,9 @@ class Api::ContactsController < ApplicationController
       email: params[:email] || @contact.email,
       phone_number: params[:phone_number] || @contact.phone_number,
       bio: params[:bio] || @contact.bio,
-
+      address: params[:address] || @contact.address,
+      longitude: longitude,
+      latitude: latitude,
     )
     @contact.save
     render "show.json.jb"
