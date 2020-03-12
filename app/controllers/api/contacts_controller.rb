@@ -9,7 +9,7 @@ class Api::ContactsController < ApplicationController
     longitude = results.first.coordinates[1]
     latitude = results.first.coordinates[0]
 
-    @contact = Contact.save(
+    @contact = Contact.new(
       first_name: params[:first_name],
       middle_name: params[:middle_name],
       last_name: params[:last_name],
