@@ -8,4 +8,5 @@
   address: contact.address,
   longitude: contact.longitude,
   latitude: contact.latitude,
+
 }
