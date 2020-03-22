@@ -1,9 +1,11 @@
 class Api::ContactsController < ApplicationController
   def index
     if current_user
-      @contacts = current_user.contacts
+      group = Group.find_by(name: params[:category_name])
+      group_people = group.contacts
+      @contacts = group_people.where(user_id: current_user.id)
     else
-      @contacts = []
+      @contacts = Contact.all
     end
     render "index.json.jb"
   end
@@ -33,7 +35,7 @@ class Api::ContactsController < ApplicationController
   end
 
   def show
-    @contact = Contact.find_by(id: params[:id])
+    @contact = Contact.find(params[:id])
     render "show.json.jb"
   end
 
@@ -42,7 +44,7 @@ class Api::ContactsController < ApplicationController
     longitude = results.first.coordinates[1]
     latitude = results.first.coordinates[0]
 
-    @contact = Contact.find_by(id: params[:id])
+    @contact = Contact.find(params[:id])
 
     @contact.first_name = params[:first_name] || @contact.first_name
     @contact.middle_name = params[:middle_name] || @contact.middle_name
@@ -62,7 +64,7 @@ class Api::ContactsController < ApplicationController
   end
 
   def destroy
-    @contact = Contact.find_by(id: params[:id])
+    @contact = Contact.find(params[:id])
     @contact.destroy
     render json: { message: "Contact id# #{params[:id]} was successfully destroyed" }
   end
