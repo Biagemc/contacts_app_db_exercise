@@ -1,19 +1,19 @@
 class Api::ContactsController < ApplicationController
   def index
-    if current_user
-      group = Group.find_by(name: params[:category_name])
-      group_people = group.contacts
-      @contacts = group_people.where(user_id: current_user.id)
-    else
-      @contacts = Contact.all
-    end
+    # if current_user
+    #   group = Group.find_by(name: params[:category_name])
+    #   group_people = group.contacts
+    #   @contacts = group_people.where(user_id: current_user.id)
+    # else
+    @contacts = Contact.all
+    # end
     render "index.json.jb"
   end
 
   def create
-    results = Geocoder.search(:address)
-    longitude = results.first.coordinates[1]
-    latitude = results.first.coordinates[0]
+    # results = Geocoder.search(:address)
+    # longitude = results.first.coordinates[1]
+    # latitude = results.first.coordinates[0]
 
     @contact = Contact.new(
       first_name: params[:first_name],
@@ -23,8 +23,8 @@ class Api::ContactsController < ApplicationController
       phone_number: params[:phone_number],
       bio: params[:bio],
       address: params[:address],
-      latitude: latitude,
-      longitude: longitude,
+      # latitude: latitude,
+      # longitude: longitude,
       user_id: current_user.id,
     )
     if @contact.save
@@ -40,9 +40,9 @@ class Api::ContactsController < ApplicationController
   end
 
   def update
-    results = Geocoder.search(:address)
-    longitude = results.first.coordinates[1]
-    latitude = results.first.coordinates[0]
+    # results = Geocoder.search(:address)
+    # longitude = results.first.coordinates[1]
+    # latitude = results.first.coordinates[0]
 
     @contact = Contact.find(params[:id])
 
@@ -53,8 +53,9 @@ class Api::ContactsController < ApplicationController
     @contact.phone_number = params[:phone_number] || @contact.phone_number
     @contact.bio = params[:bio] || @contact.bio
     @contact.address = params[:address] || @contact.address
-    @contact.longitude = longitude
-    @contact.latitude = latitude
+    @contact.user_id = params[:user_id] || current_user.id
+    # @contact.longitude = longitude
+    # @contact.latitude = latitude
 
     if @contact.save
       render "show.json.jb"
@@ -65,7 +66,10 @@ class Api::ContactsController < ApplicationController
 
   def destroy
     @contact = Contact.find(params[:id])
-    @contact.destroy
-    render json: { message: "Contact id# #{params[:id]} was successfully destroyed" }
+    if @contact.destroy
+      render json: { message: "Contact id# #{params[:id]} was successfully destroyed" }
+    else
+      render json: { errors: @contact.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 end

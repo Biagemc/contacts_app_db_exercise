@@ -23,9 +23,9 @@ class Contact < ApplicationRecord
     return "#{first_name} #{middle_name} #{last_name}"
   end
 
-  def japan_country_code
-    "+81 #{phone_number}"
-  end
+  # def japan_country_code
+  #   "+81 #{phone_number}"
+  # end
 
   # def address
   #   [street, city, state, country].compact.join(", ")
